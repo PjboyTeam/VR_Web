@@ -77,6 +77,8 @@
 		if(startactions !== null, startactions() );
 	</action>
 
+	<!-- 插入动态热点生成函数 -->
+	<action></action>
 
 	<scene name="scene_start" title="start" onstart="" thumburl="panos/start.tiles/thumb.jpg" lat="" lng="" heading="">
 
