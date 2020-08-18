@@ -81,4 +81,47 @@
 
 		);
 	</action>
+	<!-- 小行星开场 -->
+	<action name="skin_setup_littleplanetintro" scope="local">
+		skin_hideskin(instant);
+		set(global.lpinfo, scene=get(xml.scene), hlookat=get(view.hlookat), vlookat=get(view.vlookat), fov=get(view.fov), fovmax=get(view.fovmax), limitview=get(view.limitview) );
+		set(view, fovmax=170, limitview=lookto, vlookatmin=90, vlookatmax=90);
+		set_hotspot_visible(false);
+		lookat(calc(global.lpinfo.hlookat - 180), 90, 150, 1, 0, 0);
+		set(events[lp_events].onloadcomplete,
+			delayedcall(0.5,
+				if(lpinfo.scene === xml.scene,
+					set(control.usercontrol, off);
+					set(view, limitview=get(lpinfo.limitview), vlookatmin=null, view.vlookatmax=null);
+					tween(view.hlookat|view.vlookat|view.fov|view.distortion, calc('' + lpinfo.hlookat + '|' + lpinfo.vlookat + '|' + lpinfo.fov + '|' + 0.0), 3.0, easeOutQuad);
+					delayedcall(3.0,
+						set(control.usercontrol, all);
+						tween(view.fovmax, get(lpinfo.fovmax));
+						skin_deeplinking_update_url();
+						delete(global.lpinfo);
+						skin_showskin();
+						set_hotspot_visible(true);
+					);
+					,
+					delete(global.lpinfo);
+				);
+			);
+		);
+	</action>
+	
+	<!-- 隐藏热点 -->
+	<action name="set_hotspot_visible">
+		for(set(i,0),i LT hotspot.count,inc(i),
+			if(%1 == false,
+				if(hotspot[get(i)].visible == true,
+					set(hotspot[get(i)].mark,true);set(hotspot[get(i)].visible,%1);
+					);
+				,
+				if(hotspot[get(i)].mark == true OR hotspot[get(i)].mark2 == true,
+					set(hotspot[get(i)].visible,%1);
+					);
+				);
+			
+		);
+	</action>
 </krpano>
